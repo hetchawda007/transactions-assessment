@@ -21,6 +21,20 @@ def test_database_url_is_normalized_for_async_usage() -> None:
     )
 
 
+def test_render_database_url_ssl_mode_is_normalized() -> None:
+    settings = Settings(
+        database_url=(
+            "postgresql://user:password@render-db.internal/database"
+            "?sslmode=require"
+        )
+    )
+
+    assert settings.database_url == (
+        "postgresql+asyncpg://user:password@render-db.internal/database"
+        "?ssl=require"
+    )
+
+
 @pytest.fixture
 def transaction() -> Transaction:
     return Transaction(
